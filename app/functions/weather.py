@@ -8,4 +8,4 @@ def calculateWeather(planets : list) -> Weather:
     :param planets: List[Planet]
     :return: Weather
     """
-    return Weather(1,"lluvia")
+    return Weather(1,"sequia")
