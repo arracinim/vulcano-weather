@@ -1,3 +1,4 @@
+import uvicorn as uvicorn
 from fastapi import FastAPI
 
 from app.routes.weather import weather
@@ -17,6 +18,11 @@ app = FastAPI(title="Vulcano Weather",
 
 app.include_router(weather)
 
+
 @app.get("/")
-def index():
+def health_check():
     return {"health_check": "up"}
+
+
+if __name__ == '__main__':
+    uvicorn.run(app, host="0.0.0.0", port=8082)

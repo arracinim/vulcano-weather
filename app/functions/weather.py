@@ -11,14 +11,15 @@ def calculateWeather(planets: list) -> str:
     :param planets: list of planet instances
     :return: str with the weather
     """
+    sunInside = False
 
     planets_aligned, sun_aligned = aligned(planets)
 
+    # if the planets are not aligned means that they are forming a triangle.
     if not planets_aligned:
         sunInside = sunInsideTriangle(planets, sun_coordinates)
 
     maxPerimeter = compareMaxPerimeter(calculatePerimeter(planets), max_triangle_perimeter)
-    # if the planets are not aligned means that they are forming a triangle.
 
     if planets_aligned and sun_aligned:
         return "sequia"
@@ -83,7 +84,7 @@ def sunInsideTriangle(planets: list, sunCoordinates: Coordinates) -> bool:
 
     :param sunCoordinates: Coordinates object
     :param planets: list of planet instances
-    :return: Boolean
+    :return: True if the sun is inside the triangle
     """
 
     dX = sunCoordinates.x - planets[2].coordinates.x
@@ -102,4 +103,13 @@ def sunInsideTriangle(planets: list, sunCoordinates: Coordinates) -> bool:
 
 
 def compareMaxPerimeter(perimeter: float, maxPerimeter: float) -> bool:
-    return perimeter / maxPerimeter > 0.99
+    """
+    Calculate is the perimeter of the triangle is maximum
+
+    :param perimeter: Perimeter of the triangle
+    :param maxPerimeter: max perimeter calculated before
+    :return: true if the perimeter es maximum
+    """
+    # In this case we are going to consider the perimeter is maximum when
+    # the relation is higher than 0.98
+    return perimeter / maxPerimeter > 0.98
