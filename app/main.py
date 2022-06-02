@@ -1,16 +1,22 @@
 from fastapi import FastAPI
-from app.models.planet import Planet
-from app.models.coordinates import Coordinates
 
-app = FastAPI()
+from app.routes.weather import weather
 
-ferengi = Planet(name="Ferengi", radius=500, angular_speed=1, coordinates=Coordinates(x=0, y=500))
-betasoide = Planet(name="Betasoide", radius=2000, angular_speed=3, coordinates=Coordinates(x=0, y=2000))
-vulcano = Planet(name="Vulcano", radius=1000, angular_speed=5, coordinates=Coordinates(x=0, y=1000))
+API_description = """ 
+**Vulcano-Weather API helps Vulcano people to know the weather of the planet in the next 10 years**
+"""
 
-planets = [ferengi, betasoide, vulcano]
+app = FastAPI(title="Vulcano Weather",
+              description=API_description,
+              version="1.0",
+              contact={
+                  "name": "Angel Racini",
+                  "url": "https://github.com/arracinim/vulcano-weather",
+                  "email": "angelricardoracinimeza@gmail.com"
+              }, )
 
-@app.get('/')
-async def index():
-    return {"python": "vulcano-weather"}
+app.include_router(weather)
 
+@app.get("/")
+def index():
+    return {"health_check": "up"}
