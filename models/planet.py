@@ -1,8 +1,8 @@
 import math
 from pydantic import BaseModel
 
-from app.models.coordinates import Coordinates
-from app.utils.constants import circumference_degrees
+from models.coordinates import Coordinates
+from utils.constants import circumference_degrees
 
 
 class Planet(BaseModel):
@@ -17,7 +17,7 @@ class Planet(BaseModel):
         self.radius = radius
         self.coordinates = coordinates
 
-    def getCoordinates(self, day: int) -> Coordinates:
+    def get_coordinates(self, day: int) -> Coordinates:
         """
         Given a day, set the coordinates of the planet and return the position values
 

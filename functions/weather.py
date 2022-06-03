@@ -1,10 +1,10 @@
 import math
 
-from app.models.coordinates import Coordinates
-from app.utils.constants import sun_coordinates, max_triangle_perimeter
+from models.coordinates import Coordinates
+from utils.constants import sun_coordinates, max_triangle_perimeter
 
 
-def calculateWeather(planets: list) -> str:
+def calculate_weather(planets: list) -> str:
     """
     Calculates the weather based on the position of the planets given in the list planets
 
@@ -17,9 +17,9 @@ def calculateWeather(planets: list) -> str:
 
     # if the planets are not aligned means that they are forming a triangle.
     if not planets_aligned:
-        sunInside = sunInsideTriangle(planets, sun_coordinates)
+        sunInside = sun_Inside_triangle(planets, sun_coordinates)
 
-    maxPerimeter = compareMaxPerimeter(calculatePerimeter(planets), max_triangle_perimeter)
+    maxPerimeter = compare_max_perimeter(calculate_perimeter(planets), max_triangle_perimeter)
 
     if planets_aligned and sun_aligned:
         return "sequia"
@@ -58,7 +58,7 @@ def aligned(planets: list) -> (bool, bool):
     return planets[1].coordinates.y == (m * planets[1].coordinates.y + b), b == 0.0
 
 
-def calculatePerimeter(planets: list) -> float:
+def calculate_perimeter(planets: list) -> float:
     """
     Given a list of planets calculate the perimeter of the triangle.
 
@@ -78,7 +78,7 @@ def calculatePerimeter(planets: list) -> float:
     return dFB + dFV + dVB
 
 
-def sunInsideTriangle(planets: list, sunCoordinates: Coordinates) -> bool:
+def sun_Inside_triangle(planets: list, sunCoordinates: Coordinates) -> bool:
     """
     Calculate if the sun is inside the triangle formed by the planets
 
@@ -102,7 +102,7 @@ def sunInsideTriangle(planets: list, sunCoordinates: Coordinates) -> bool:
     return s >= 0 and t >= 0 and s + t <= D
 
 
-def compareMaxPerimeter(perimeter: float, maxPerimeter: float) -> bool:
+def compare_max_perimeter(perimeter: float, maxPerimeter: float) -> bool:
     """
     Calculate is the perimeter of the triangle is maximum
 
@@ -111,5 +111,5 @@ def compareMaxPerimeter(perimeter: float, maxPerimeter: float) -> bool:
     :return: true if the perimeter es maximum
     """
     # In this case we are going to consider the perimeter is maximum when
-    # the relation is higher than 0.98
-    return perimeter / maxPerimeter > 0.98
+    # the relation is higher than 0.99
+    return perimeter / maxPerimeter > 0.99

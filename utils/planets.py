@@ -1,5 +1,5 @@
-from app.models.coordinates import Coordinates
-from app.models.planet import Planet
+from models.coordinates import Coordinates
+from models.planet import Planet
 
 ferengi = Planet(name="Ferengi", radius=500, angular_speed=1, coordinates=Coordinates(x=500, y=0))
 vulcano = Planet(name="Vulcano", radius=1000, angular_speed=5, coordinates=Coordinates(x=1000, y=0))

@@ -1,4 +1,5 @@
-from app.models.coordinates import Coordinates
+from models.coordinates import Coordinates
+import os
 
 # geometry
 circumference_degrees = 360.0
