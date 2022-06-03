@@ -1,8 +1,8 @@
 import math
 from pydantic import BaseModel
 
-from app.models.coordinates import Coordinates
-from app.utils.constants import circumference_degrees
+from models.coordinates import Coordinates
+from utils.constants import circumference_degrees
 
 
 class Planet(BaseModel):
@@ -11,12 +11,13 @@ class Planet(BaseModel):
     angular_speed: float
     coordinates: Coordinates
 
-    def __int__(self, name, radius, angular_speed):
+    def __int__(self, name, radius, angular_speed, coordinates):
         self.angular_speed = angular_speed
         self.name = name
         self.radius = radius
+        self.coordinates = coordinates
 
-    def getCoordinates(self, day: int) -> Coordinates:
+    def get_coordinates(self, day: int) -> Coordinates:
         """
         Given a day, set the coordinates of the planet and return the position values
 
@@ -24,6 +25,6 @@ class Planet(BaseModel):
         :return: coordinates of the planet given the day
         """
         degrees = circumference_degrees - (day * self.angular_speed % circumference_degrees)
-        self.coordinates.x = round(self.radius * math.cos(degrees * math.pi / 180))
-        self.coordinates.y = round(self.radius * math.sin(degrees * math.pi / 180))
+        self.coordinates.x = math.floor(self.radius * math.cos(degrees * math.pi / 180))
+        self.coordinates.y = math.floor(self.radius * math.sin(degrees * math.pi / 180))
         return self.coordinates
