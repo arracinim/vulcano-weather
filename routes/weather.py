@@ -2,10 +2,10 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import Json
 from sqlalchemy.orm import Session
 
-from app.database.database import Base, engine, SessionLocal
-from app.functions.forecastWeather import forecastSingleDayWeather
-from app.repositories.weather import getWeather, getWeatherByDay, insertWeather
-from app.utils.constants import ten_years
+from database.database import Base, engine, SessionLocal
+from functions.forecast_weather import forecast_single_day_weather
+from repositories.weather import get_weather, get_weather_by_day, insert_weather, get_weather_periods
+from utils.constants import ten_years
 
 weather = APIRouter()
 Base.metadata.create_all(bind=engine)
@@ -32,13 +32,13 @@ def get_db():
                              "example": {
                                  "ids": {"response": "weather was forecasted"}}}}}}
              )
-async def setWeatherRouter(db: Session = Depends(get_db)) -> Json:
-    if getWeather(db):
+def set_weather_router(db: Session = Depends(get_db)) -> Json:
+    if get_weather(db):
         pass
     else:
         for i in range(0, ten_years):
-            singleDayWeather = forecastSingleDayWeather(i)
-            await insertWeather(db, singleDayWeather)
+            singleDayWeather = forecast_single_day_weather(i)
+            insert_weather(db, singleDayWeather)
     return {"response": "weather was forecasted"}
 
 
@@ -62,8 +62,8 @@ async def setWeatherRouter(db: Session = Depends(get_db)) -> Json:
                          }
                      }}}
              )
-async def getWeatherRouter(db: Session = Depends(get_db)) -> Json:
-    weatherList = await getWeather(db)
+def get_weather_router(db: Session = Depends(get_db)) -> Json:
+    weatherList = get_weather(db)
     if weatherList:
         return weatherList
     else:
@@ -89,9 +89,36 @@ async def getWeatherRouter(db: Session = Depends(get_db)) -> Json:
                          }
                      }}}
              )
-async def getSingleDayWeatherRouter(day: int, db: Session = Depends(get_db)) -> Json:
-    weatherDay = await getWeatherByDay(db, day)
+def get_single_day_weather_router(day: int, db: Session = Depends(get_db)) -> Json:
+    weatherDay = get_weather_by_day(db, day)
     if weatherDay:
         return weatherDay
     else:
         raise HTTPException(status_code=400, detail=f"There is no predicted climate for the day:  {day}")
+
+
+@weather.get("/weather/periods/count", name="Get Weather Periods",
+             summary="Return a list of the count of weather periods",
+             tags=["Weather"],
+             responses={
+                 200: {
+                     "content": {
+                         "application/json": {
+                             "example": [{"weather":"lluvia intensa","periods":1080},{"weather":"sequia","periods":10},
+                                         {"weather":"no especificado","periods":1790},
+                                         {"weather":"lluvia","periods":710},{"weather":"optimo","periods":10}]}}},
+                 400: {
+                     "content": {
+                         "application/json": {
+                             "example":
+                                 {"detail": "No weather information found"}
+
+                         }
+                     }}}
+             )
+def get_weather_periods_router(db: Session = Depends(get_db)) -> Json:
+    weatherPeriodsList = get_weather_periods(db)
+    if weatherPeriodsList:
+        return weatherPeriodsList
+    else:
+        raise HTTPException(status_code=400, detail="No weather information found")
