@@ -1,7 +1,9 @@
-import uvicorn as uvicorn
 from fastapi import FastAPI
+import logging
 
 from routes.weather import weather
+logging.config.fileConfig('logging.conf', disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
 
 API_description = """ 
 **Vulcano-Weather API helps Vulcano people to know the weather 

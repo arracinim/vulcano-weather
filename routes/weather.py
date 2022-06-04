@@ -1,6 +1,10 @@
+from datetime import time
+
 from fastapi import APIRouter, HTTPException, Depends
+from psycopg2 import DatabaseError
 from pydantic import Json
 from sqlalchemy.orm import Session
+import logging
 
 from database.database import Base, engine, SessionLocal
 from functions.forecast_weather import forecast_single_day_weather
@@ -9,6 +13,7 @@ from utils.constants import ten_years
 
 weather = APIRouter()
 Base.metadata.create_all(bind=engine)
+logger = logging.getLogger(__name__)
 
 
 def get_db():
@@ -34,11 +39,20 @@ def get_db():
              )
 def set_weather_router(db: Session = Depends(get_db)) -> Json:
     if get_weather(db):
+        logger.info("THE_WEATHER_WERE_ALREADY_FORECASTED")
         pass
     else:
+        logger.info("FORECASTING_WEATHER_FOR_TEN_YEARS_STARTED")
+        start_time = int(round(time.time() * 1000))
         for i in range(0, ten_years):
             singleDayWeather = forecast_single_day_weather(i)
-            insert_weather(db, singleDayWeather)
+            try:
+                insert_weather(db, singleDayWeather)
+            except DatabaseError as err:
+                logger.error(f"ERROR_INSERTING_VALUE_[{singleDayWeather}]_IN_DB", err)
+                pass
+        total_time = int(round(time.time() * 1000)) - start_time
+        logger.info(f"FORECAST_FINISHED_TOTAL_TIME_[{total_time}]_MILLISECONDS")
     return {"response": "weather was forecasted"}
 
 
