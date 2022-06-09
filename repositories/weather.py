@@ -50,4 +50,4 @@ def get_weather_periods(db: Session):
     :return: Weather Periods
     """
     sql_result = db.query(Weather.weather, func.count(Weather.day).label('periods')).group_by(Weather.weather).all()
-    return [Period(weather = x[0], periods= x[1]) for x in sql_result]
+    return [Period(weather=x[0], periods=x[1]) for x in sql_result]

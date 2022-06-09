@@ -55,7 +55,7 @@ def aligned(planets: list) -> (bool, bool):
     # the planet is aligned with the others also if the b (intercept with y) is zero,
     # it means that the planets are aligned with the sun
 
-    return planets[1].coordinates.y == (m * planets[1].coordinates.y + b), b == 0.0
+    return planets[1].coordinates.y == (m * planets[1].coordinates.x + b), b == 0.0
 
 
 def calculate_perimeter(planets: list) -> float:
