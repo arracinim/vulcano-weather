@@ -43,6 +43,8 @@ def test_weather_periods_count():
     client.get("/weather/forecast")
     response = client.get("/weather/periods/count")
     assert response.status_code == 200
-    assert response.json() == [{"weather":"lluvia intensa","periods":1080},{"weather":"sequia","periods":10},
-                               {"weather":"no especificado","periods":1790},
-                               {"weather":"lluvia","periods":710},{"weather":"optimo","periods":10}]
+    assert response.json() == [{'periods': 480, 'weather': 'lluvia intensa'},
+                               {'periods': 10, 'weather': 'sequia'},
+                               {'periods': 2400, 'weather': 'no especificado'},
+                               {'periods': 700, 'weather': 'lluvia'},
+                               {'periods': 10, 'weather': 'optimo'}]
