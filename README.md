@@ -29,6 +29,7 @@ de la recta entre los dos planetas con mayor radio.
 * postgres DB -> Instancia de GPC CloudSQL (configuracion horizontal y vertical minima para el proyecto)
 * Servidor con 2 instancias (configuracion horizontal minima) escalable a maximo 3 -> GCP Cloud Run
 
+**Actualmente el servicio en la nube, se encuentra desactivado**
 
 - **URL del Servicio:** [Link text Here](https://vulcano-weather-z2exu4tjca-uc.a.run.app/)
 - **URL con la documentacion de los servicios REST expuestos:** [Link text Here](https://vulcano-weather-z2exu4tjca-uc.a.run.app/docs)
